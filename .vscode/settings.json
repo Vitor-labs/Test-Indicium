@@ -1,0 +1,67 @@
+// .vscode/settings.json
+{
+	// Files & bytecode exclusion
+	"files.exclude": {
+		"**/__pycache__": true,
+		"**/*.pyc": true,
+		"**/.pytest_cache": true
+	},
+	// Indentation: 4-wide real tabs
+	"editor.detectIndentation": false,
+	"editor.insertSpaces": false,
+	"editor.tabSize": 4,
+	// Global format on save + import sorting / fix-all
+	"editor.formatOnSave": true,
+	"editor.codeActionsOnSave": {
+		"source.organizeImports": "always",
+		"source.fixAll": "always"
+	},
+	// Jupyter notebooks: same rules
+	"notebook.formatOnSave.enabled": true,
+	"notebook.codeActionsOnSave": {
+		"source.organizeImports": "explicit",
+		"source.fixAll": "explicit"
+	},
+	// Pylance + Pyright full workspace analysis
+	"python.languageServer": "Pylance",
+	"python.analysis.diagnosticMode": "workspace",
+	"python.analysis.typeCheckingMode": "standard",
+	"python.analysis.useLibraryCodeForTypes": true,
+	"python.analysis.logLevel": "Information",
+	// Linting & auto-fix
+	"python.linting.enabled": true,
+	"python.linting.ruffEnabled": true,
+	"python.linting.ruffArgs": [
+		"--fix"
+	],
+	// Mypy integration
+	"python.linting.mypyEnabled": true,
+	"python.linting.mypyArgs": [
+		"--config-file=pyproject.toml",
+		"--show-error-codes"
+	],
+	// Per-language override for pure Python
+	"[python]": {
+		"editor.defaultFormatter": "charliermarsh.ruff",
+		"editor.formatOnSave": true,
+		"editor.insertSpaces": false,
+		"editor.tabSize": 4,
+		"editor.codeActionsOnSave": {
+			"source.organizeImports": "always",
+			"source.fixAll": "always"
+		}
+	},
+	// Pytest: only look under src/
+	"python.testing.pytestEnabled": true,
+	"python.testing.unittestEnabled": false,
+	"python.testing.pytestArgs": [
+		"src"
+	],
+	// Never write .pyc in new terminals
+	"terminal.integrated.env.windows": {
+		"PYTHONDONTWRITEBYTECODE": "1"
+	},
+	"terminal.integrated.env.linux": {
+		"PYTHONDONTWRITEBYTECODE": "1"
+	}
+}

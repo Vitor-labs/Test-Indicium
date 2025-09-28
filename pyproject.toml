@@ -1,0 +1,65 @@
+[project]
+name = "test-indicium"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "beautifulsoup4>=4.13.5",
+    "camelot-py[cv]>=1.0.9",
+    "fastparquet>=2024.11.0",
+    "httpx>=0.28.1",
+    "langchain>=0.3.27",
+    "langchain-openai>=0.3.33",
+    "numpy>=2.3.3",
+    "pandas>=2.3.2",
+    "plotly>=6.3.0",
+    "polars>=1.33.1",
+    "pyarrow>=21.0.0",
+    "pydantic>=2.11.9",
+    "python-dateutil>=2.9.0.post0",
+    "python-dotenv>=1.1.1",
+    "qdrant-client>=1.15.1",
+    "requests>=2.32.5",
+    "sentence-transformers>=5.1.1",
+    "sqlalchemy>=2.0.43",
+    "tabulate>=0.9.0",
+]
+
+
+[tool.mypy]
+# strict mode + workspace files
+python_version = "3.12"
+mypy_path = ["src"]
+strict = true
+ignore_missing_imports = true
+show_error_codes = true
+warn_unused_configs = true
+
+[tool.ruff]
+# Lint‐and‐fix with Ruff, including import sorting
+line-length = 88
+select = ["E", "F", "W", "C90", "I"]
+ignore = ["E203"]
+per-file-ignores = { "__init__.py" = ["F401"] }
+# Ruff’s --fix mode
+fix = true
+
+[tool.isort]
+# Matches Ruff’s default import‐sorting style
+profile = "black"
+line_length = 88
+multi_line_output = 3
+include_trailing_comma = true
+
+[tool.pytest.ini_options]
+# Direct pytest to src/
+minversion = "6.0"
+addopts = "--maxfail=1 --disable-warnings -q"
+testpaths = ["src"]
+
+[dependency-groups]
+dev = [
+    "ipykernel>=6.30.1",
+]
+testing-stuff = []
