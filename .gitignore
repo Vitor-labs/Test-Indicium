@@ -12,7 +12,8 @@ wheels/
 # Secret File
 .env
 
-# Data Files
+# Data Files and Dirs
+qdrant_storage/
 **.csv
 **.parquet
 **.db

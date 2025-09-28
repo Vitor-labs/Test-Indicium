@@ -1,7 +1,7 @@
 ## 🏗️ Arquitetura Geral do Sistema 
 ```
 ┌────────────────┐     ┌──────────────────┐    ┌─────────────────┐
-│   User Query   │───▶│   Orchestrator   │───▶│  Report Engine  │
+│   User Query   │────▶│   Orchestrator   │───▶│  Report Engine  │
 └────────────────┘     └──────────────────┘    └─────────────────┘
                                 │
                 ┌───────────────┼─────────────────┐
@@ -18,6 +18,22 @@
           └─────────────┘  │ Chroma)     │
                            └─────────────┘
 ```
+### Pre-requisits:
+1. Crie um `.env` baseado no `exemple.env` fornecido.
+2. Crie as chaves de API necessrias para a NEWs API e OpenAI.
+
+### Como rodar:
+1. sincronize o ambiente (use o uv, é mais facil)
+```bash
+uv sync
+``` 
+2. suba os containers necessarios:
+```bash
+docker-compose up -d
+```
+3. Rode o notebook `1.0-Download_Data.ipynb`
+   - ele vai baixar as fontes de dados, dividir por ambientes e criar a coleção no Qdrant
+
 ### 2. **Core Components**
 
 #### **Query Orchestrator**
