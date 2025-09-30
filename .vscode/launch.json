@@ -1,0 +1,202 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "🚀 SARS-CoV Analysis System - Main",
+			"type": "debugpy",
+			"request": "launch",
+			"module": "src.presentation.cli.main",
+			"cwd": "${workspaceFolder}",
+			"console": "integratedTerminal",
+			"env": {
+				"PYTHONPATH": "${workspaceFolder}",
+				"NEWS_API_KEY": "${env:NEWS_API_KEY}",
+				"GOOGLE_API_KEY": "${env:GOOGLE_API_KEY}",
+				"QDRANT_URL": "http://localhost:6333"
+			},
+			"envFile": "${workspaceFolder}/.env",
+			"justMyCode": false,
+			"stopOnEntry": false,
+			"args": [],
+			"preLaunchTask": "🏗️ Setup Qdrant Environment",
+			"postDebugTask": "🛑 Stop Qdrant"
+		},
+		{
+			"name": "📰 News Pipeline Only",
+			"type": "debugpy",
+			"request": "launch",
+			"program": "${workspaceFolder}/scripts/run_news_pipeline.py",
+			"cwd": "${workspaceFolder}",
+			"console": "integratedTerminal",
+			"env": {
+				"PYTHONPATH": "${workspaceFolder}",
+				"NEWS_API_KEY": "${env:NEWS_API_KEY}",
+				"GOOGLE_API_KEY": "${env:GOOGLE_API_KEY}",
+				"QDRANT_URL": "http://localhost:6333"
+			},
+			"envFile": "${workspaceFolder}/.env",
+			"justMyCode": false,
+			"stopOnEntry": false,
+			"preLaunchTask": "🏗️ Setup Qdrant Environment",
+			"postDebugTask": "🛑 Stop Qdrant"
+		},
+		{
+			"name": "🤖 Interactive Query Mode",
+			"type": "debugpy",
+			"request": "launch",
+			"program": "${workspaceFolder}/scripts/interactive_query.py",
+			"cwd": "${workspaceFolder}",
+			"console": "integratedTerminal",
+			"env": {
+				"PYTHONPATH": "${workspaceFolder}",
+				"NEWS_API_KEY": "${env:NEWS_API_KEY}",
+				"GOOGLE_API_KEY": "${env:GOOGLE_API_KEY}",
+				"QDRANT_URL": "http://localhost:6333"
+			},
+			"envFile": "${workspaceFolder}/.env",
+			"justMyCode": false,
+			"stopOnEntry": false,
+			"preLaunchTask": "🏗️ Setup Qdrant Environment",
+			"postDebugTask": "🛑 Stop Qdrant"
+		},
+		{
+			"name": "🧪 Test Single Query",
+			"type": "debugpy",
+			"request": "launch",
+			"program": "${workspaceFolder}/scripts/test_query.py",
+			"cwd": "${workspaceFolder}",
+			"console": "integratedTerminal",
+			"env": {
+				"PYTHONPATH": "${workspaceFolder}",
+				"NEWS_API_KEY": "${env:NEWS_API_KEY}",
+				"GOOGLE_API_KEY": "${env:GOOGLE_API_KEY}",
+				"QDRANT_URL": "http://localhost:6333"
+			},
+			"envFile": "${workspaceFolder}/.env",
+			"justMyCode": false,
+			"stopOnEntry": false,
+			"args": [
+				"What was the month with more cases of SARS in 2019?"
+			],
+			"preLaunchTask": "🏗️ Setup Qdrant Environment",
+			"postDebugTask": "🛑 Stop Qdrant"
+		},
+		{
+			"name": "🔧 Debug Infrastructure - Vector Store",
+			"type": "debugpy",
+			"request": "launch",
+			"program": "${workspaceFolder}/scripts/debug_vector_store.py",
+			"cwd": "${workspaceFolder}",
+			"console": "integratedTerminal",
+			"env": {
+				"PYTHONPATH": "${workspaceFolder}",
+				"NEWS_API_KEY": "${env:NEWS_API_KEY}",
+				"QDRANT_URL": "http://localhost:6333"
+			},
+			"envFile": "${workspaceFolder}/.env",
+			"justMyCode": false,
+			"stopOnEntry": true,
+			"preLaunchTask": "🏗️ Setup Qdrant Environment",
+			"postDebugTask": "🛑 Stop Qdrant"
+		},
+		{
+			"name": "🔧 Debug Infrastructure - Database",
+			"type": "debugpy",
+			"request": "launch",
+			"program": "${workspaceFolder}/scripts/debug_database.py",
+			"cwd": "${workspaceFolder}",
+			"console": "integratedTerminal",
+			"env": {
+				"PYTHONPATH": "${workspaceFolder}"
+			},
+			"envFile": "${workspaceFolder}/.env",
+			"justMyCode": false,
+			"stopOnEntry": true
+		},
+		{
+			"name": "🔧 Debug Infrastructure - Vector Store",
+			"type": "debugpy",
+			"request": "launch",
+			"program": "${workspaceFolder}/scripts/debug_vector_store.py",
+			"cwd": "${workspaceFolder}",
+			"console": "integratedTerminal",
+			"env": {
+				"PYTHONPATH": "${workspaceFolder}",
+				"NEWS_API_KEY": "${env:NEWS_API_KEY}",
+				"QDRANT_URL": "http://localhost:6333"
+			},
+			"envFile": "${workspaceFolder}/.env",
+			"justMyCode": false,
+			"stopOnEntry": true
+		},
+		{
+			"name": "🔧 Debug Infrastructure - LLM Service",
+			"type": "debugpy",
+			"request": "launch",
+			"program": "${workspaceFolder}/scripts/debug_llm.py",
+			"cwd": "${workspaceFolder}",
+			"console": "integratedTerminal",
+			"env": {
+				"PYTHONPATH": "${workspaceFolder}",
+				"GOOGLE_API_KEY": "${env:GOOGLE_API_KEY}"
+			},
+			"envFile": "${workspaceFolder}/.env",
+			"justMyCode": false,
+			"stopOnEntry": true
+		},
+		{
+			"name": "🧪 Run Unit Tests",
+			"type": "debugpy",
+			"request": "launch",
+			"module": "pytest",
+			"cwd": "${workspaceFolder}",
+			"console": "integratedTerminal",
+			"env": {
+				"PYTHONPATH": "${workspaceFolder}"
+			},
+			"envFile": "${workspaceFolder}/.env",
+			"justMyCode": false,
+			"args": [
+				"tests/",
+				"-v",
+				"--tb=short"
+			]
+		},
+		{
+			"name": "🧪 Run Specific Test File",
+			"type": "debugpy",
+			"request": "launch",
+			"module": "pytest",
+			"cwd": "${workspaceFolder}",
+			"console": "integratedTerminal",
+			"env": {
+				"PYTHONPATH": "${workspaceFolder}"
+			},
+			"envFile": "${workspaceFolder}/.env",
+			"justMyCode": false,
+			"args": [
+				"${file}",
+				"-v",
+				"-s"
+			]
+		},
+		{
+			"name": "🐳 Qdrant Management",
+			"type": "node",
+			"request": "launch",
+			"program": "${workspaceFolder}/scripts/qdrant_manager.js",
+			"cwd": "${workspaceFolder}",
+			"console": "integratedTerminal"
+		}
+	],
+	"compounds": [
+		{
+			"name": "🌟 Full Stack Development",
+			"configurations": [
+				"🚀 SARS-CoV Analysis System - Main"
+			],
+			"preLaunchTask": "🏗️ Setup Qdrant Environment",
+			"stopAll": true
+		}
+	]
+}

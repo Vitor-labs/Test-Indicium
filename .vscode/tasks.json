@@ -1,0 +1,127 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "🐳 Start Qdrant",
+			"type": "shell",
+			"command": "docker-compose",
+			"args": [
+				"up",
+				"-d",
+				"qdrant"
+			],
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": false
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "🛑 Stop Qdrant",
+			"type": "shell",
+			"command": "docker-compose",
+			"args": [
+				"down"
+			],
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": false
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "🔄 Restart Qdrant",
+			"type": "shell",
+			"command": "docker-compose",
+			"args": [
+				"restart",
+				"qdrant"
+			],
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": false
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "📊 Qdrant Status",
+			"type": "shell",
+			"command": "docker-compose",
+			"args": [
+				"ps"
+			],
+			"group": "test",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": false
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "🧹 Clean Qdrant Data",
+			"type": "shell",
+			"command": "docker-compose",
+			"args": [
+				"down",
+				"-v"
+			],
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": false
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "🏗️ Setup Qdrant Environment",
+			"dependsOrder": "sequence",
+			"dependsOn": [
+				"🐳 Start Qdrant"
+			],
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": false
+			}
+		},
+		{
+			"label": "⏳ Wait for Qdrant Health Check",
+			"type": "shell",
+			"command": "bash",
+			"args": [
+				"-c",
+				"echo 'Waiting for Qdrant to be healthy...' && for i in {1..30}; do if curl -s http://localhost:6333/health > /dev/null 2>&1; then echo 'Qdrant is ready!'; exit 0; fi; echo \"Attempt $i/30...\"; sleep 2; done; echo 'Qdrant health check timeout!'; exit 1"
+			],
+			"group": "test",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": false
+			},
+			"problemMatcher": []
+		}
+	]
+}
