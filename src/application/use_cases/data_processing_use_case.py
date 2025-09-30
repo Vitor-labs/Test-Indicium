@@ -1,4 +1,6 @@
 # src/application/use_cases/data_processing_use_case.py
+from os import path
+
 from camelot.io import read_pdf
 from pandas import DataFrame, Series, concat, isna, read_csv, to_datetime, to_numeric
 
@@ -14,7 +16,7 @@ class DataProcessingUseCase:
         Inicializa caso de uso de processamento.
 
         Args:
-            data_repository: Repositório de dados
+                        data_repository: Repositório de dados
         """
         self.data_repository = data_repository
 
@@ -56,13 +58,18 @@ class DataProcessingUseCase:
         """
         dfs = []
         for year in years:
-            print(f"Baixando dados do ano {year}...")
+            print(f"Baixando dados do ano 20{year}...")
+            # nvamente, aqui se verificaria se o arquivo está presente no data lake
+            # mas como não tem data lake, vê se tem no disco local.
             dfs.append(
                 self._apply_dtype_conversions(
                     read_csv(
-                        f"https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SRAG/{year}/INFLUD{year}-26-06-2025.csv",
+                        f"./data/raw/srag_20{year}.csv"
+                        if path.exists(f"./data/raw/srag_20{year}.csv")
+                        else f"https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SRAG/20{year}/INFLUD{year}-26-06-2025.csv",
                         sep=config.separator,
                         encoding=config.encoding,
+                        on_bad_lines="skip",
                         low_memory=False,
                     ),
                     config,
@@ -73,22 +80,28 @@ class DataProcessingUseCase:
     def _apply_dtype_conversions(
         self, df: DataFrame, config: DataProcessingConfig
     ) -> DataFrame:
-        """Aplica conversões de tipo aos dados."""
+        """Aplica conversões de tipo aos dados com base no dicionário de mapeamento."""
         df_converted = df.copy()
 
-        # Aplicar conversões baseadas em padrões
-        for col in df_converted.columns:
-            col_type = str(df_converted[col].dtype)
+        for col, target_type in config.dtype_mapping.items():
+            if col not in df_converted.columns:
+                continue
 
-            if col_type == "object":
-                # Tentar converter datas
-                if any(keyword in col.upper() for keyword in ["DT_", "DATA"]):
+            try:
+                if target_type in ("Int64", "Float64"):
+                    df_converted[col] = to_numeric(
+                        df_converted[col], errors="coerce"
+                    ).astype(target_type)
+                elif target_type == "Categorical":
+                    df_converted[col] = df_converted[col].astype("category")
+                elif target_type == "UTF8":
+                    df_converted[col] = df_converted[col].astype("string")
+                elif target_type in ("DateTime", "Float64") and "DT" in col.upper():
                     df_converted[col] = to_datetime(
                         df_converted[col], format=config.date_format, errors="coerce"
                     )
-                # Tentar converter números
-                elif df_converted[col].str.match(r"^\d+$", na=False).any():
-                    df_converted[col] = to_numeric(df_converted[col], errors="coerce")
+            except Exception as e:  # não quebrar o fluxo, apenas logar
+                print(f"⚠️ Falha ao converter coluna {col} para {target_type}: {e}")
 
         return df_converted
 

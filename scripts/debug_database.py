@@ -6,7 +6,7 @@ import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from src.infrastructure.database.sqlite_repository import SQLiteDataRepository
+from infrastructure.database.file_repository import FileDataRepository
 
 if __name__ == "__main__":
     """Debug do repositório de banco."""
@@ -14,7 +14,7 @@ if __name__ == "__main__":
     print("=" * 50)
 
     try:
-        repo = SQLiteDataRepository("../data/interim/srag_2019_2024.db")
+        repo = FileDataRepository("../data/interim/srag_2019_2024.db")
 
         # Teste simples de query
         result = repo.execute_query("SELECT COUNT(*) FROM srag_cases LIMIT 1")
@@ -25,7 +25,7 @@ if __name__ == "__main__":
         print(f"📋 Colunas encontradas: {len(schema_result)}")
 
         for col in schema_result[:5]:  # Primeiras 5 colunas
-            print(f"  - {col[1]} ({col[2]})")
+            print(f"  - {col[1]} ({col[2]})")  # type: ignore
 
         print("✅ Debug do banco concluído!")
 

@@ -7,7 +7,7 @@ from sqlalchemy.types import TIMESTAMP
 from domain.repositories.data_repository import DataRepository
 
 
-class SQLiteDataRepository(DataRepository):
+class FileDataRepository(DataRepository):
     """Implementação SQLite do repositório de dados."""
 
     def __init__(self, db_path: str) -> None:

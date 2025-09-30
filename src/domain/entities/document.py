@@ -31,6 +31,7 @@ class DataProcessingConfig:
     """Configuração para processamento de dados."""
 
     mixed_type_columns: list[int]
+    dtype_mapping: dict[str, str]
     date_format: str = "%d/%m/%Y"
     encoding: str = "latin1"
     separator: str = ";"

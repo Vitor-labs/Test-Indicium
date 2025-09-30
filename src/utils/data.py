@@ -98,7 +98,7 @@ COLUMN_TYPE_MATCHING: dict[str, str] = {
     "OBESIDADE": "Float64",
     "OBES_IMC": "Float64",
     "OUT_MORBI": "Float64",
-    "MORB_DESC": "Categorical",
+    "MORB_DESC": "UTF8",
     "TABAG": "Float64",
     "VACINA": "Float64",
     "DT_UT_DOSE": "Float64",

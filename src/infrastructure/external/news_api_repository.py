@@ -23,11 +23,11 @@ class NewsAPIRepository(NewsRepository):
         Busca artigos da News API.
 
         Args:
-            query: Termo de busca
-            days_back: Número de dias para buscar (máximo 29)
+                query: Termo de busca
+                days_back: Número de dias para buscar (máximo 29)
 
         Returns:
-            Lista de artigos encontrados
+                Lista de artigos encontrados
         """
         to_date = datetime.now()
         from_date = to_date - timedelta(days=min(days_back, 29))
@@ -54,7 +54,9 @@ class NewsAPIRepository(NewsRepository):
         except HTTPStatusError as e:
             raise Exception(f"Request failed: {e}")
 
-    def _convert_to_articles(self, raw_articles: list[dict[str, str]]) -> list[Article]:
+    def _convert_to_articles(
+        self, raw_articles: list[dict[str, str | dict[str, str]]]
+    ) -> list[Article]:
         """Converte dados brutos da API para entidades Article."""
         articles = []
         for article in raw_articles:
@@ -65,21 +67,20 @@ class NewsAPIRepository(NewsRepository):
             if date_str := article.get("publishedAt"):
                 try:
                     published_date = datetime.fromisoformat(
-                        date_str.replace("Z", "+00:00")
+                        str(date_str).replace("Z", "+00:00")
                     )
                 except ValueError:
                     pass
-
             articles.append(
                 Article(
                     id=f"news_{hash(article['url'])}",
-                    title=article.get("title", ""),
-                    content=article.get("content", ""),
-                    description=article.get("description", ""),
-                    url=article.get("url", ""),
+                    title=str(article.get("title", "")),
+                    content=str(article.get("content", "")),
+                    description=str(article.get("description", "")),
+                    url=str(article.get("url", "")),
                     published_date=published_date,
-                    source_name=article.get("source", {}).get("name", ""),
-                    image_url=article.get("urlToImage", ""),
+                    source_name=article.get("source").get("name", ""),  # type: ignore
+                    image_url=str(article.get("urlToImage", "")),
                 )
             )
         return articles

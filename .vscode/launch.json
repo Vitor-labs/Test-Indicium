@@ -114,22 +114,6 @@
 			"stopOnEntry": true
 		},
 		{
-			"name": "🔧 Debug Infrastructure - Vector Store",
-			"type": "debugpy",
-			"request": "launch",
-			"program": "${workspaceFolder}/scripts/debug_vector_store.py",
-			"cwd": "${workspaceFolder}",
-			"console": "integratedTerminal",
-			"env": {
-				"PYTHONPATH": "${workspaceFolder}",
-				"NEWS_API_KEY": "${env:NEWS_API_KEY}",
-				"QDRANT_URL": "http://localhost:6333"
-			},
-			"envFile": "${workspaceFolder}/.env",
-			"justMyCode": false,
-			"stopOnEntry": true
-		},
-		{
 			"name": "🔧 Debug Infrastructure - LLM Service",
 			"type": "debugpy",
 			"request": "launch",
@@ -184,7 +168,7 @@
 			"name": "🐳 Qdrant Management",
 			"type": "node",
 			"request": "launch",
-			"program": "${workspaceFolder}/scripts/qdrant_manager.js",
+			"program": "${workspaceFolder}/scripts/qdrant_manager.py",
 			"cwd": "${workspaceFolder}",
 			"console": "integratedTerminal"
 		}

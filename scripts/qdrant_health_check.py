@@ -79,7 +79,7 @@ def main() -> None:
         if info["status"] == "healthy":
             print(f"  Coleções: {len(info['collections'])}")
             for collection in info["collections"]:
-                print(f"    - {collection.get('name', 'N/A')}")
+                print(f"    - {collection.get('name', 'N/A')}")  # type: ignore
         else:
             print(f"  Erro: {info.get('error', 'N/A')}")
         return

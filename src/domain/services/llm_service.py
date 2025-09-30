@@ -11,7 +11,7 @@ class LLMService(ABC):
         pass
 
     @abstractmethod
-    def summarize_results(self, question: str, results: list[tuple]) -> str:
+    def summarize_results(self, question: str, results: list[tuple[str]]) -> str:
         """Sumariza resultados de query."""
         pass
 
