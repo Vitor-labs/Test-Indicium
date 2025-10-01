@@ -57,6 +57,8 @@ class LangChainChainService(ChainService):
                     content="""
 					SQL Query to validate: {sql_query}
 
+					Database Name: srag_cases
+
 					Database Schema: {schema_info}
 
 					Original Question: {original_question}
@@ -83,6 +85,7 @@ class LangChainChainService(ChainService):
                 HumanMessage(
                     content="""
 					Question: {question}
+
 					Data Sample: {data}
 
 					Statistical analysis:
@@ -103,6 +106,7 @@ class LangChainChainService(ChainService):
                 HumanMessage(
                     content="""
 					Original Question: {question}
+
 					Statistical Analysis: {analysis}
 
 					Key epidemiological insights:
@@ -116,7 +120,7 @@ class LangChainChainService(ChainService):
             [
                 SystemMessage(
                     content="""
-					You are a health informatics specialist combining multiple data sources.
+					You are a health informatics specialist combining many data sources.
 					Use conversation history to provide contextually relevant responses.
 
 					Always consider:
@@ -131,7 +135,8 @@ class LangChainChainService(ChainService):
 					Conversation History:
 					{chat_history}
 
-					Current Question: {question}
+					Current Question:
+                    {question}
 
 					Relevant Context:
 					{context}
@@ -205,7 +210,7 @@ class LangChainChainService(ChainService):
             print(f"Error in SQL chain: {e}")
             return f"SELECT * FROM srag_cases WHERE 1=1 LIMIT 100; -- Error: {e}"
 
-    def summarization_chain(self, question: str, data: list[tuple]) -> str:
+    def summarization_chain(self, question: str, data: list[tuple[str]]) -> str:
         """Chain for summarization with specialized epidemiological analysis."""
 
         if not data:

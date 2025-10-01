@@ -42,7 +42,7 @@ class SARSCoVAnalysisSystem:
             self.llm_service,
             self.data_repository,
             self.vector_repository,
-            "../data/interim/srag_2019_2024.db",
+            "./data/interim/srag_2019_2024.db",
         )
         # Casos de uso
         self.data_processing = DataProcessingUseCase(self.data_repository)

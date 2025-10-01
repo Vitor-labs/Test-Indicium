@@ -1,8 +1,8 @@
 # src/infrastructure/langchain/langchain_agent_service.py
 from langchain.agents import AgentType, Tool, initialize_agent
-from langchain.agents.agent_toolkits import SQLDatabaseToolkit
 from langchain.memory.buffer_window import ConversationBufferWindowMemory
-from langchain.sql_database import SQLDatabase
+from langchain_community.agent_toolkits.sql.toolkit import SQLDatabaseToolkit
+from langchain_community.utilities import SQLDatabase
 
 from domain.entities.document import QueryResult
 from domain.repositories.data_repository import DataRepository
@@ -185,6 +185,7 @@ class LangChainAgentService(AgentService):
         - Como combinar resultados
         """
         try:
+            print(f"Processing question: {question}")
             # Agente processa a pergunta e decide workflow
             # Extrair informações do resultado
             # Buscar artigos relacionados para o QueryResult

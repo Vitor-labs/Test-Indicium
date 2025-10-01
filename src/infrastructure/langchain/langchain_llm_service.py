@@ -44,7 +44,7 @@ class LangChainLLMService(LLMService):
 
     def __init__(
         self,
-        model_name: str = "gemini-1.5-pro",
+        model_name: str = "gemini-2.5-flash",
         temperature: float = 0.1,
         max_tokens: int = 2048,
     ) -> None:
@@ -90,16 +90,19 @@ class LangChainLLMService(LLMService):
 					- Consider relevant temporal filters
 					- Focus on epidemiologically meaningful patterns
 
-					The database contains SRAG (Severe Acute Respiratory Syndrome)
-                    surveillance data from Brazil (2019-2024).
+					The database 'srag_cases' contains SRAG (Severe Acute Respiratory
+                    Syndrome) surveillance data from Brazil (2019-2024).
 					"""
                 ),
                 HumanMessage(
                     content="""
+                    Table Name 'srag_cases'
+
 					Table schema 'srag_cases':
 					{schema_info}
 
-					Question: {question}
+					Question:
+                    {question}
 
 					{format_instructions}
 					"""
@@ -136,6 +139,7 @@ class LangChainLLMService(LLMService):
 					Original question: {question}
 
 					Data sample (first rows): {data_sample}
+
 					Total records: {total_records}
 
 					{format_instructions}
