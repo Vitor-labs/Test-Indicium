@@ -1,29 +1,49 @@
-# src/presentation/cli/main.py
+# src/presentation/cli/enhanced_main.py
 from dotenv import load_dotenv
 
-from application.use_cases.ai_query_use_case import AIQueryUseCase
 from application.use_cases.data_processing_use_case import DataProcessingUseCase
+from application.use_cases.enhanced_ai_query_use_case import EnhancedAIQueryUseCase
 from application.use_cases.news_collection_use_case import NewsCollectionUseCase
 from domain.entities.document import DataProcessingConfig
 from infrastructure.database.file_repository import FileDataRepository
-from infrastructure.external.gemini_service import GeminiLLMService
 from infrastructure.external.news_api_repository import NewsAPIRepository
+from infrastructure.langchain.langchain_agent_service import LangChainAgentService
+from infrastructure.langchain.langchain_chain_service import LangChainChainService
+from infrastructure.langchain.langchain_llm_service import LangChainLLMService
 from infrastructure.vector_store.qdrant_repository import QdrantVectorRepository
 from utils.data import COLUMN_TYPE_MATCHING, MIXED_TYPE_COLUMNS
 
 
 class SARSCoVAnalysisSystem:
-    """Sistema principal de análise SARS-CoV."""
+    """
+    Sistema aprimorado com LangChain para análise SARS-CoV.
+
+    Melhorias com LangChain:
+    - Agentes inteligentes que decidem automaticamente o workflow
+    - Memory entre interações para contexto contínuo
+    - Chains especializadas para tarefas complexas
+    - Output parsers para estruturação automática
+    - Error handling e retry logic integrados
+    """
 
     def __init__(self) -> None:
-        """Inicializa sistema com todas as dependências."""
+        """Inicializa sistema aprimorado com LangChain."""
         load_dotenv()
-        # Repositórios
-        self.data_repository = FileDataRepository("./data/interim/srag_2019_2024.db")
+
+        # Repositórios (mantidos da versão anterior)
+        self.data_repository = FileDataRepository("../data/interim/srag_2019_2024.db")
         self.news_repository = NewsAPIRepository()
         self.vector_repository = QdrantVectorRepository()
-        # Serviços
-        self.llm_service = GeminiLLMService()
+
+        # Serviços LangChain (NOVA IMPLEMENTAÇÃO)
+        self.llm_service = LangChainLLMService()
+        self.chain_service = LangChainChainService(self.llm_service)
+        self.agent_service = LangChainAgentService(
+            self.llm_service,
+            self.data_repository,
+            self.vector_repository,
+            "../data/interim/srag_2019_2024.db",
+        )
         # Casos de uso
         self.data_processing = DataProcessingUseCase(self.data_repository)
         self.news_collection = NewsCollectionUseCase(
@@ -31,12 +51,85 @@ class SARSCoVAnalysisSystem:
         )
         # Schema info (seria carregado do dicionário de dados)
         self.schema_info = COLUMN_TYPE_MATCHING
-        self.ai_query = AIQueryUseCase(
-            self.data_repository,
-            self.vector_repository,
-            self.llm_service,
-            self.schema_info,
+        self.enhanced_ai_query = EnhancedAIQueryUseCase(
+            self.agent_service, self.chain_service
         )
+
+    def interactive_agent_mode(self) -> None:
+        """
+        Modo interativo aprimorado com agente inteligente.
+
+        Vantagens:
+        - Agente lembra contexto entre perguntas
+        - Decisões automáticas sobre qual ferramenta usar
+        - Análise epidemiológica especializada
+        - Integração automática de dados e notícias
+        """
+        print("=== Modo Agente Inteligente ===")
+        print("O agente tem acesso a:")
+        print("• Banco de dados SRAG (2019-2024)")
+        print("• Base de notícias relacionadas")
+        print("• Ferramentas de análise epidemiológica")
+        print("• Contexto temporal e histórico")
+        print("\nDigite 'quit' para sair, 'history' para ver histórico")
+
+        while True:
+            question = input("\n🤖 Sua pergunta: ").strip()
+
+            if question.lower() in ["quit", "sair", "exit"]:
+                break
+
+            if question.lower() in ["history", "historico"]:
+                print(f"\n📊 {self.enhanced_ai_query.get_conversation_summary()}")
+                continue
+
+            if not question:
+                continue
+
+            print("\n🔍 Agente processando...")
+            try:
+                # Usar agente inteligente (padrão)
+                answer = self.enhanced_ai_query.ask_question(question, use_agent=True)
+                print(f"\n✅ Resposta:\n{answer}")
+            except Exception as e:
+                print(f"\n❌ Erro: {e}")
+
+    def compare_approaches_mode(self) -> None:
+        """
+        Modo para comparar agente vs chains manuais.
+
+        Útil para entender quando usar cada abordagem.
+        """
+        print("=== Comparação: Agente vs Chains Manuais ===")
+
+        while True:
+            question = input("\n📝 Pergunta para comparar: ").strip()
+
+            if question.lower() in ["quit", "sair"]:
+                break
+
+            if not question:
+                continue
+
+            print("\n🤖 Processando com AGENTE...")
+            try:
+                agent_answer = self.enhanced_ai_query.ask_question(
+                    question, use_agent=True
+                )
+                print(f"Resposta do Agente:\n{agent_answer}")
+            except Exception as e:
+                print(f"Erro no agente: {e}")
+
+            print("\n⚙️ Processando com CHAINS manuais...")
+            try:
+                manual_answer = self.enhanced_ai_query.ask_question(
+                    question, use_agent=False
+                )
+                print(f"Resposta Manual:\n{manual_answer}")
+            except Exception as e:
+                print(f"Erro nas chains: {e}")
+
+            print("\n" + "=" * 80)
 
     def setup_data_pipeline(self) -> None:
         """Configura pipeline de dados inicial."""
@@ -86,6 +179,6 @@ class SARSCoVAnalysisSystem:
                 continue
 
             try:
-                print(f"\nResposta:\n{self.ai_query.ask_question(question)}")
+                print(f"\nResposta:\n{self.enhanced_ai_query.ask_question(question)}")
             except Exception as e:
                 print(f"Erro ao processar pergunta: {e}")

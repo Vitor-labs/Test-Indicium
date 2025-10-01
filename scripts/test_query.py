@@ -19,7 +19,7 @@ if __name__ == "__main__":
 
     try:
         system = SARSCoVAnalysisSystem()
-        answer = system.ai_query.ask_question(question)
+        answer = system.enhanced_ai_query.ask_question(question)
         print(f"\n📋 Resposta:\n{answer}")
         print("\n✅ Teste concluído com sucesso!")
     except Exception as e:
