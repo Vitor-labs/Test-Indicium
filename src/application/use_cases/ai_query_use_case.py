@@ -41,22 +41,15 @@ class AIQueryUseCase:
         # 1. Converter para SQL
         sql = self.llm_service.natural_to_sql(question, self.schema_info)
         print(f"SQL gerado: {sql}")
-
-        # 2. Executar query
-        results = self.data_repository.execute_query(sql)
-
-        # 3. Sumarizar resultados
-        summary = self.llm_service.summarize_results(question, results)
-
-        # 4. Buscar notícias relacionadas
-        related_articles = self.vector_repository.search_similar(summary, limit=5)
-        article_titles = [
-            f"{article.id}: {article.title}" for article in related_articles
-        ]
-
-        # 5. Gerar resposta final
-        final_answer = self.llm_service.generate_final_answer(
-            question, sql, summary, article_titles
+        summary = self.llm_service.summarize_results(
+            question, self.data_repository.execute_query(sql)
         )
-
-        return final_answer
+        return self.llm_service.generate_final_answer(
+            question,
+            sql,
+            summary,
+            [
+                f"{article.id}: {article.title}"
+                for article in self.vector_repository.search_similar(summary, limit=5)
+            ],
+        )

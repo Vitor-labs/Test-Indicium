@@ -97,7 +97,6 @@ class QdrantVectorRepository(VectorRepository):
                     published_date = (
                         datetime.fromisoformat(payload["published_date"]) or None
                     )
-
                 articles.append(
                     Article(
                         id=payload["article_id"],

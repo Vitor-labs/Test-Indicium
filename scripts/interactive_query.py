@@ -11,8 +11,7 @@ from src.presentation.cli.main import SARSCoVAnalysisSystem
 if __name__ == "__main__":
     """Executa apenas o modo interativo."""
     try:
-        system = SARSCoVAnalysisSystem()
-        system.interactive_query_mode()
+        SARSCoVAnalysisSystem().interactive_query_mode()
     except Exception as e:
         print(f"❌ Erro no modo interativo: {e}")
         sys.exit(1)

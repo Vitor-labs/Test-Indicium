@@ -16,7 +16,7 @@ class DataProcessingUseCase:
         Inicializa caso de uso de processamento.
 
         Args:
-                        data_repository: Repositório de dados
+            data_repository: Repositório de dados
         """
         self.data_repository = data_repository
 

@@ -10,6 +10,7 @@ from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmb
 from pydantic import BaseModel, Field, SecretStr
 
 from domain.services.llm_service import LLMService
+from utils.data import LLM_READY_SCHEMA
 
 
 class SQLQuery(BaseModel):
@@ -56,8 +57,7 @@ class LangChainLLMService(LLMService):
             temperature: Creativity control (0-1)
             max_tokens: Maximum tokens in response
         """
-        api_key = os.getenv("GOOGLE_API_KEY")
-        if not api_key:
+        if not (api_key := os.getenv("GOOGLE_API_KEY")):
             raise ValueError("GOOGLE_API_KEY environment variable not found")
 
         self.llm = ChatGoogleGenerativeAI(
@@ -73,15 +73,16 @@ class LangChainLLMService(LLMService):
 
     def _setup_chains(self) -> None:
         """Configure LangChain chains with structured templates."""
-
         # SQL Generation Chain
         sql_parser = PydanticOutputParser(pydantic_object=SQLQuery)
         self.sql_prompt = ChatPromptTemplate.from_messages(
             [
                 SystemMessage(
-                    content="""
+                    content=f"""
 					You are an expert SQL analyst for epidemiological data analysis.
 					Always generate valid and optimized SQLite queries.
+
+                    {LLM_READY_SCHEMA}
 
 					Important rules:
 					- Use only the 'srag_cases' table

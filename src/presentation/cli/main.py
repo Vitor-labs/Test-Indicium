@@ -52,7 +52,11 @@ class SARSCoVAnalysisSystem:
         # Schema info (seria carregado do dicionário de dados)
         self.schema_info = COLUMN_TYPE_MATCHING
         self.enhanced_ai_query = EnhancedAIQueryUseCase(
-            self.agent_service, self.chain_service
+            self.agent_service,
+            self.chain_service,
+            self.data_repository,
+            self.vector_repository,
+            self.schema_info,
         )
 
     def interactive_agent_mode(self) -> None:
