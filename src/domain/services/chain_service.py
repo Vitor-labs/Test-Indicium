@@ -6,7 +6,7 @@ class ChainService(ABC):
     """Interface para serviços de chains LangChain."""
 
     @abstractmethod
-    def sql_chain(self, question: str, schema_info: dict[str, str]) -> str:
+    def sql_chain(self, question: str, schema_info: str) -> str:
         """Chain para conversão NL->SQL."""
         pass
 

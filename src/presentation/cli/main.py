@@ -11,7 +11,7 @@ from infrastructure.langchain.langchain_agent_service import LangChainAgentServi
 from infrastructure.langchain.langchain_chain_service import LangChainChainService
 from infrastructure.langchain.langchain_llm_service import LangChainLLMService
 from infrastructure.vector_store.qdrant_repository import QdrantVectorRepository
-from utils.data import COLUMN_TYPE_MATCHING, MIXED_TYPE_COLUMNS
+from utils.data import COLUMN_TYPE_MATCHING, LLM_READY_SCHEMA, MIXED_TYPE_COLUMNS
 
 
 class SARSCoVAnalysisSystem:
@@ -34,7 +34,6 @@ class SARSCoVAnalysisSystem:
         self.data_repository = FileDataRepository("../data/interim/srag_2019_2024.db")
         self.news_repository = NewsAPIRepository()
         self.vector_repository = QdrantVectorRepository()
-
         # Serviços LangChain (NOVA IMPLEMENTAÇÃO)
         self.llm_service = LangChainLLMService()
         self.chain_service = LangChainChainService(self.llm_service)
@@ -50,7 +49,7 @@ class SARSCoVAnalysisSystem:
             self.news_repository, self.vector_repository
         )
         # Schema info (seria carregado do dicionário de dados)
-        self.schema_info = COLUMN_TYPE_MATCHING
+        self.schema_info = LLM_READY_SCHEMA
         self.enhanced_ai_query = EnhancedAIQueryUseCase(
             self.agent_service,
             self.chain_service,
@@ -147,7 +146,8 @@ class SARSCoVAnalysisSystem:
         srag_data = self.data_processing.download_and_process_srag_data(
             years=list(range(19, 25)),
             config=DataProcessingConfig(
-                mixed_type_columns=MIXED_TYPE_COLUMNS, dtype_mapping=self.schema_info
+                mixed_type_columns=MIXED_TYPE_COLUMNS,
+                dtype_mapping=COLUMN_TYPE_MATCHING,
             ),
         )
         print("3. Salvando dados...")

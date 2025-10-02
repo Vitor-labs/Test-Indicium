@@ -172,11 +172,8 @@ class LangChainChainService(ChainService):
             ]
         )
 
-    def sql_chain(self, question: str, schema_info: dict[str, str]) -> str:
+    def sql_chain(self, question: str, schema_info: str) -> str:
         """Specialized chain for SQL generation and validation."""
-        schema_text = "\n".join(
-            [f"{col}: {dtype}" for col, dtype in schema_info.items()]
-        )
         initial_sql_prompt = ChatPromptTemplate.from_messages(
             [
                 SystemMessage(
@@ -198,10 +195,10 @@ class LangChainChainService(ChainService):
                     "sql_query": initial_runnable.invoke(
                         {
                             "question": question,
-                            "schema_info": schema_text,
+                            "schema_info": schema_info,
                         }
                     ),
-                    "schema_info": schema_text,
+                    "schema_info": schema_info,
                     "original_question": question,
                 }
             ).strip()

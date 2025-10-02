@@ -23,7 +23,7 @@ class EnhancedAIQueryUseCase:
         chain_service: ChainService,
         data_repository: DataRepository,
         vector_repository: VectorRepository,
-        schema_info: dict[str, str],
+        schema_info: str,
     ) -> None:
         """
         Initialize enhanced use case.
